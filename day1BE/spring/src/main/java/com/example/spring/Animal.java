@@ -1,6 +1,6 @@
 package com.example.spring;
 
 public interface Animal {
-    public void makeSound();
+    void makeSound();
     String getName();
 }

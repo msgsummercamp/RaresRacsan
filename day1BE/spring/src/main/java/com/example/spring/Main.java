@@ -20,5 +20,9 @@ public class Main {
         HelloService helloService = (HelloService) context.getBean("helloService");
         helloService.sayHello();
         */
+
+        PetOwner owner = context.getBean(PetOwner.class);
+        owner.playWithPet();    // Cat and dog use @Component, PetOwner uses @Autowired and @Qualifier
+        owner.playWithAnotherPet();
     }
 }

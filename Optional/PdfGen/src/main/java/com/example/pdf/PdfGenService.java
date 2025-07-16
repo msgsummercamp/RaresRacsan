@@ -6,7 +6,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.factory.annotation.Value;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,6 +14,9 @@ import java.util.Scanner;
 
 @Service
 public class PdfGenService implements CommandLineRunner {
+    @Value("${pdf.output.dir}")
+    private String outputDir;
+
     private String fileName;
     private String text;
     private String imagePath;
@@ -35,12 +38,14 @@ public class PdfGenService implements CommandLineRunner {
         if (!fileName.endsWith(".pdf")) {
             fileName += ".pdf";
         }
-        System.out.println("PDF will be generated as: " + fileName);
+        // Use the output directory from application.properties
+        String fullPath = outputDir + java.io.File.separator + fileName;
+        System.out.println("PDF will be generated as: " + fullPath);
         // Logic to create a PDF document
         Document document = new Document();
         try {
             // Open the document with the specified file name
-            openDocument(fileName, document);
+            openDocument(fullPath, document);
             while(true) {
                 System.out.println("Choose an option: 1 - Add text, 2 - Add Image, 3 - Close");
                 String option = scanner.nextLine();

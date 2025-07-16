@@ -11,9 +11,4 @@ public class AppConfig {
     public HelloService helloService() {
         return new HelloService();
     }
-
-    @Bean
-    public Dog dog() {
-        return new Dog();
-    }
 }

@@ -12,6 +12,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+// TO DO
+/*
+1. Make a main file and remove the main from here
+2. Add an already existing PDF file to the project.
+3. Implement a method that reads the PDF file and adds some text to it.
+4. Test the method by reading the existing PDF file and adding text to it.
+ */
+
+
+
+
+
+
+
 @Service
 public class PdfGenService implements CommandLineRunner {
     @Value("${pdf.output.dir}")

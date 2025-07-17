@@ -12,5 +12,5 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 
     // custom query to count users
     @Query("SELECT COUNT(u) FROM User u")
-    long countUsers();
+    long countAllUsers();
 }

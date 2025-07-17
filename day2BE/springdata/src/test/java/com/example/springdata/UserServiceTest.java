@@ -60,8 +60,13 @@ public class UserServiceTest {
 
     @Test
     void testDeleteUser() {
+        // assuming the user with ID 1 exists
+        when(userRepository.existsById(1)).thenReturn(true);
         Integer userId = 1;
+        when(userRepository.existsById(userId)).thenReturn(true);
+
         userService.deleteUser(userId);
+
         verify(userRepository, times(1)).deleteById(userId);
     }
 
@@ -88,11 +93,11 @@ public class UserServiceTest {
     @Test
     void testCountUsers() {
         long expectedCount = 5L;
-        when(userRepository.countUsers()).thenReturn(expectedCount);
+        when(userRepository.countAllUsers()).thenReturn(expectedCount);
 
-        long actualCount = userService.countUsers();
+        long actualCount = userService.countAllUsers();
 
         assertEquals(expectedCount, actualCount);
-        verify(userRepository, times(1)).countUsers();
+        verify(userRepository, times(1)).countAllUsers();
     }
 }

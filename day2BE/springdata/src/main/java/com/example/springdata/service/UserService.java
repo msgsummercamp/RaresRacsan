@@ -2,6 +2,7 @@ package com.example.springdata.service;
 
 import com.example.springdata.model.User;
 import com.example.springdata.repository.IUserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,39 +13,59 @@ import java.util.Optional;
 public class UserService {
     private final IUserRepository userRepository;
 
-    public UserService(@Autowired IUserRepository userRepository) {
+    public UserService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public Optional<User> findByUsername(String username) {
+        if(username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
         return userRepository.findByUsername(username);
     }
 
     public Optional<User> findByEmail(String email) {
+        if(email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
         return userRepository.findByEmail(email);
     }
 
     public void addUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         userRepository.save(user);
     }
 
     public void deleteUser(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("User with id " + id + " does not exist");
+        }
         userRepository.deleteById(id);
     }
 
     public void updateUserWithId(Integer id, User user) {
-        if (userRepository.existsById(id)) {
-            userRepository.save(user);
-        } else {
-            throw new IllegalArgumentException("User with id " + id + " does not exist.");
+        if (id == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
         }
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("User with id " + id + " does not exist");
+        }
+        userRepository.save(user);
     }
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public long countUsers() {
-        return userRepository.countUsers();
+    public long countAllUsers() {
+        return userRepository.countAllUsers();
     }
 }

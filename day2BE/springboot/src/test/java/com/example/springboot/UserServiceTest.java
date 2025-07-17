@@ -23,7 +23,15 @@ public class UserServiceTest {
     void testGetUsers() {
         List<User> users = List.of(new User(1, "John Doe", "mail4@gmail.com"));
         when(userRepository.getUsers()).thenReturn(users);
-        List<User> result = userService.getUsers();
+        List<User> result = userService.getUsers(null);
+        assertEquals(users, result, "The returned user list should match the mocked data");
+    }
+
+    @Test
+    void testGetUserWithValidation() {
+        List<User> users = List.of(new User(1, "John Doe", "mail4@gmail.com"));
+        when(userRepository.getUsers()).thenReturn(users);
+        List<User> result = userService.getUsers(1);
         assertEquals(users, result, "The returned user list should match the mocked data");
     }
 }

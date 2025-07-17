@@ -19,9 +19,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> getUsers() {
-        logger.info("Fetching all users from the repository");
-        return userRepository.getUsers();
+    public List<User> getUsers(Integer minId) {
+        logger.info("Fetching all users from the repository with minId: {}", minId);
+        return userRepository.getUsers().stream()
+                .filter(user -> user.getId() >= minId)
+                .toList();
     }
 
 }

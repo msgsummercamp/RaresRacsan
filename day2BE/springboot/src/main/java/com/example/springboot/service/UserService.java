@@ -26,4 +26,9 @@ public class UserService implements IUserService {
                 .toList();
     }
 
+    @Override
+    public List<User> getUsers() {
+        logger.info("Fetching all users from the repository");
+        return userRepository.getUsers();
+    }
 }

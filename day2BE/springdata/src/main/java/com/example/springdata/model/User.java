@@ -5,14 +5,16 @@ import lombok.*;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Entity
+@Table(name = "users")
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(nullable = false, unique = true)
     private String username;

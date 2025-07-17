@@ -9,10 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,44 +24,61 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    void testFindByUsername() {
+    void findByUsername_WhenUserExists_ShouldReturnUser() {
         String username = "testUser";
         User user = new User();
         user.setUsername(username);
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
-        Optional<User> result = userService.findByUsername(username);
+        User result = userService.findByUsername(username);
 
-        assertTrue(result.isPresent());
-        assertEquals(username, result.get().getUsername());
+        assertEquals(username, result.getUsername());
         verify(userRepository, times(1)).findByUsername(username);
-
     }
 
     @Test
-    void testFindByEmail() {
+    void findByUsername_WhenUserNotFound_ShouldThrowException() {
+        String username = "nonExistentUser";
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> userService.findByUsername(username));
+        verify(userRepository, times(1)).findByUsername(username);
+    }
+
+    @Test
+    void findByEmail_WhenUserExists_ShouldReturnUser() {
         String email = "email@gmail.com";
         User user = new User();
         user.setEmail(email);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-        Optional<User> result = userService.findByEmail(email);
-        assertTrue(result.isPresent());
-        assertEquals(email, result.get().getEmail());
+
+        User result = userService.findByEmail(email);
+
+        assertEquals(email, result.getEmail());
         verify(userRepository, times(1)).findByEmail(email);
     }
 
     @Test
-    void testAddUser() {
+    void findByEmail_WhenUserNotFound_ShouldThrowException() {
+        String email = "nonexistent@gmail.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> userService.findByEmail(email));
+        verify(userRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    void addUser_WhenValidUser_ShouldSaveUser() {
         User user = new User();
         user.setUsername("newUser");
+
         userService.addUser(user);
+
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    void testDeleteUser() {
-        // assuming the user with ID 1 exists
-        when(userRepository.existsById(1)).thenReturn(true);
+    void deleteUser_WhenUserExists_ShouldDeleteUser() {
         Integer userId = 1;
         when(userRepository.existsById(userId)).thenReturn(true);
 
@@ -71,11 +88,10 @@ public class UserServiceTest {
     }
 
     @Test
-    void testUpdateUserWithId() {
+    void updateUserWithId_WhenUserExists_ShouldUpdateUser() {
         Integer userId = 1;
         User user = new User();
         user.setUsername("updatedUser");
-
         when(userRepository.existsById(userId)).thenReturn(true);
 
         userService.updateUserWithId(userId, user);
@@ -84,14 +100,14 @@ public class UserServiceTest {
     }
 
     @Test
-    void testFindAll() {
+    void findAll_ShouldReturnAllUsers() {
         userService.findAll();
+
         verify(userRepository, times(1)).findAll();
     }
 
-    // testing the custom query to count users
     @Test
-    void testCountUsers() {
+    void countAllUsers_ShouldReturnUserCount() {
         long expectedCount = 5L;
         when(userRepository.countAllUsers()).thenReturn(expectedCount);
 

@@ -3,11 +3,9 @@ package com.example.springdata.service;
 import com.example.springdata.model.User;
 import com.example.springdata.repository.IUserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -17,18 +15,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> findByUsername(String username) {
+    public User findByUsername(String username) {
         if(username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User with username '" + username + "' not found"));
     }
 
-    public Optional<User> findByEmail(String email) {
+    public User findByEmail(String email) {
         if(email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email '" + email + "' not found"));
     }
 
     public void addUser(User user) {

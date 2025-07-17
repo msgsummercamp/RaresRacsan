@@ -83,4 +83,16 @@ public class UserServiceTest {
         userService.findAll();
         verify(userRepository, times(1)).findAll();
     }
+
+    // testing the custom query to count users
+    @Test
+    void testCountUsers() {
+        long expectedCount = 5L;
+        when(userRepository.countUsers()).thenReturn(expectedCount);
+
+        long actualCount = userService.countUsers();
+
+        assertEquals(expectedCount, actualCount);
+        verify(userRepository, times(1)).countUsers();
+    }
 }

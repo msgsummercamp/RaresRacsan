@@ -1,7 +1,6 @@
 package com.example.springboot.controller;
 
 import com.example.springboot.model.User;
-import com.example.springboot.repository.UserRepository;
 import com.example.springboot.service.IUserService;
 
 import org.slf4j.Logger;

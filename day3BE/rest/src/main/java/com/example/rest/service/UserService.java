@@ -2,9 +2,12 @@ package com.example.rest.service;
 
 import com.example.rest.model.User;
 import com.example.rest.repository.IUserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class UserService {
@@ -14,10 +17,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
-    }
+    public Page<User> getAllUsers(int page, int size, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("desc") ?
+                Sort.by(sortBy).descending() :
+                Sort.by(sortBy).ascending();
 
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return userRepository.findAll(pageable);
+    }
     public void addUser(User user){
         userRepository.save(user);
     }

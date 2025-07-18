@@ -1,12 +1,12 @@
 package com.example.rest.controller;
 
 import com.example.rest.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.rest.model.User;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,15 +19,32 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllUsers() {
+    public ResponseEntity<Map<String, Object>> getAllUsers(@RequestParam (defaultValue = "0") int page,
+                                                           @RequestParam (defaultValue = "5") int size,
+                                                           @RequestParam (defaultValue = "id") String sortBy,
+                                                           @RequestParam (defaultValue = "asc") String sortDirection) {
         Map<String, Object> response = new HashMap<>();
 
+        if (page < 0 || size <= 0) {
+            response.put("message", "Invalid pagination parameters");
+            response.put("status", "error");
+            return ResponseEntity.status(400).body(response);
+        }
+
         try {
-            List<User> users = userService.getAllUsers();
+            Page<User> userPage = userService.getAllUsers(page, size, sortBy, sortDirection);
 
             response.put("message", "Users retrieved successfully");
             response.put("status", "success");
-            response.put("users", users);
+            response.put("users", userPage.getContent());
+            response.put("pagination", Map.of(
+                "currentPage", userPage.getNumber(),
+                "totalPages", userPage.getTotalPages(),
+                "totalElements", userPage.getTotalElements(),
+                "hasNext", userPage.hasNext(),
+                "hasPrevious", userPage.hasPrevious(),
+                "size", userPage.getSize()
+            ));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("message", "Failed to retrieve users: " + e.getMessage());

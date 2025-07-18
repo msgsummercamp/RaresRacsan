@@ -84,15 +84,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(response);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("message", "An unexpected error occurred: " + ex.getMessage());
-        response.put("status", "error");
-        return ResponseEntity.status(500).body(response);
-    }
-
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleUserNotFoundException(UserNotFoundException ex) {
         Map<String, Object> response = new HashMap<>();
@@ -109,5 +100,14 @@ public class GlobalExceptionHandler {
         response.put("message", ex.getMessage());
         response.put("status", "error");
         return ResponseEntity.status(409).body(response);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("message", "An unexpected error occurred: " + ex.getMessage());
+        response.put("status", "error");
+        return ResponseEntity.status(500).body(response);
     }
 }

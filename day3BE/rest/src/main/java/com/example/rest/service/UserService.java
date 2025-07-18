@@ -1,5 +1,6 @@
 package com.example.rest.service;
 
+import com.example.rest.exception.DuplicateUserException;
 import com.example.rest.exception.UserNotFoundException;
 import com.example.rest.model.User;
 import com.example.rest.repository.IUserRepository;
@@ -26,25 +27,37 @@ public class UserService {
         Pageable pageable = PageRequest.of(page, size, sort);
         return userRepository.findAll(pageable);
     }
-    public void addUser(User user){
-        userRepository.save(user);
+    public User addUser(User user){
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new DuplicateUserException("User with username '" + user.getUsername() + "' already exists");
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new DuplicateUserException("User with email '" + user.getEmail() + "' already exists");
+        }
+
+        return userRepository.save(user);
     }
 
-    public void updateUser(Integer id, String username, String email) {
+    public User updateUser(Integer id, String username, String email) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
 
         user.setUsername(username);
         user.setEmail(email);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
-    public void updateEmailForUser(Integer id, String email) {
+    public User updateEmailForUser(Integer id, String email) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
 
+        if (!user.getEmail().equals(email) && userRepository.existsByEmail(email)) {
+            throw new DuplicateUserException("Email '" + email + "' already exists");
+        }
+
         user.setEmail(email);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public void deleteUser(Integer id) {

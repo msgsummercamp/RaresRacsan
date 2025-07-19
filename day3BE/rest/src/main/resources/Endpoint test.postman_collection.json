@@ -1,0 +1,894 @@
+{
+	"info": {
+		"_postman_id": "83f4a235-fae6-42f5-bad3-f23b1a083fec",
+		"name": "Endpoint test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45171459",
+		"_collection_link": "https://raresracsan.postman.co/workspace/Rares-Racsan's-Workspace~e8a6c2db-1234-4a00-8bc9-6793f7829873/collection/45171459-83f4a235-fae6-42f5-bad3-f23b1a083fec?action=share&source=collection_link&creator=45171459"
+	},
+	"item": [
+		{
+			"name": "getAllUsers(Pagination)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"    pm.expect(responseJson).to.have.property(\"users\");\r",
+							"    pm.expect(responseJson).to.have.property(\"pagination\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status is success\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Pagination contains required fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    const pagination = responseJson.pagination;\r",
+							"    pm.expect(pagination).to.have.property(\"currentPage\");\r",
+							"    pm.expect(pagination).to.have.property(\"totalPages\");\r",
+							"    pm.expect(pagination).to.have.property(\"totalElements\");\r",
+							"    pm.expect(pagination).to.have.property(\"hasNext\");\r",
+							"    pm.expect(pagination).to.have.property(\"hasPrevious\");\r",
+							"    pm.expect(pagination).to.have.property(\"size\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Users is an array\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.users).to.be.an(\"array\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"username\": \"raa2a2res\",\r\n    \"email\": \"ema2isl@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users?page=0&size=5&sortBy=id&sortDirection=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						},
+						{
+							"key": "sortBy",
+							"value": "id"
+						},
+						{
+							"key": "sortDirection",
+							"value": "asc"
+						},
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUsers(Invalid Parameters)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has error structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\", \"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message contains validation info\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.include(\"Page number must be non-negative and size must be positive\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"username\": \"raa2a2res\",\r\n    \"email\": \"ema2isl@gmail.com\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/users?page=-1&size=0",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "-1"
+						},
+						{
+							"key": "size",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser(Valid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status is success\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success message is correct\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"User added successfully\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"johndoe123\",\r\n    \"email\": \"john.doe@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"add"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser(Invalid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has validation error structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\", \"Validation failed\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\", \"error\");\r",
+							"    pm.expect(responseJson).to.have.property(\"errors\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation errors contain username and email\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson.errors).to.have.property(\"email\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"\",\r\n    \"email\": \"invalid-email\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"add"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser(Duplicate data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has conflict error structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\", \"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message indicates duplicate user\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.include(\"already exists\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"johndoe123\",\r\n    \"email\": \"john.doe@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"add"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser(Valid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status is success\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success message is correct\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"User updated successfully\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"username\": \"johndoe_updated\",\r\n    \"email\": \"john.updated@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"update"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser(Invalid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has validation error structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\", \"Validation failed\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\", \"error\");\r",
+							"    pm.expect(responseJson).to.have.property(\"errors\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation errors contain required fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson.errors).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson.errors).to.have.property(\"email\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": null,\r\n    \"username\": \"ab\",\r\n    \"email\": \"invalid-email\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"update"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser(User not found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has not found error structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\", \"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message indicates user not found\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.include(\"not found\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 99999,\r\n    \"username\": \"nonexistent\",\r\n    \"email\": \"nonexistent@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/update",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"update"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser(Valid)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/delete/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"delete",
+						"3"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUser(user not found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/users/delete/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"delete",
+						"3"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateEmail(valid data)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has correct structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status is success\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"success\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Success message is correct\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"User email updated successfully\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/users/update-email/2?email=newemail@example.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"update-email",
+						"2"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "newemail@example.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updaeEmail(invalid email)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has validation error structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\", \"Validation failed\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\", \"error\");\r",
+							"    pm.expect(responseJson).to.have.property(\"errors\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation error contains email field\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors).to.have.property(\"email\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/users/update-email/1?email=invalid-email",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"update-email",
+						"1"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "invalid-email"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateEmail (invali id)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has validation error structure\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.have.property(\"message\", \"Validation failed\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\", \"error\");\r",
+							"    pm.expect(responseJson).to.have.property(\"errors\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation error contains id field\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors).to.have.property(\"id\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/users/update-email/-1?email=newemail@example.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"update-email",
+						"-1"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "ggggggggg",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "newemail@example.com"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

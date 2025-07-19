@@ -1,5 +1,6 @@
 package com.example.rest.controller;
 
+import com.example.rest.dto.SuccessResponse;
 import com.example.rest.dto.UpdateUserRequest;
 import com.example.rest.dto.UserRequest;
 import com.example.rest.service.UserService;
@@ -72,17 +73,9 @@ public class UserController {
             @ApiResponse(responseCode = "409", description = "User already exists",
                     content = @Content(schema = @Schema(implementation = Map.class)))
     })
-    public ResponseEntity<Map<String, Object>> addUser(@Valid @RequestBody UserRequest userRequest) {
-        Map<String, Object> response = new HashMap<>();
-
-        User user = new User();
-        user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
-        userService.addUser(user);
-
-        response.put("message", "User added successfully");
-        response.put("status", "success");
-        return ResponseEntity.status(201).body(response);
+    public ResponseEntity<SuccessResponse<User>> addUser(@Valid @RequestBody UserRequest userRequest) {
+        User savedUser = userService.addUser(userRequest);
+        return ResponseEntity.status(201).body(new SuccessResponse<>("User added successfully", savedUser));
     }
 
     @PutMapping("/update")
@@ -95,14 +88,9 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content(schema = @Schema(implementation = Map.class)))
     })
-    public ResponseEntity<Map<String, Object>> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
-        Map<String, Object> response = new HashMap<>();
-
-        userService.updateUser(updateUserRequest.getId(), updateUserRequest.getUsername(), updateUserRequest.getEmail());
-
-        response.put("message", "User updated successfully");
-        response.put("status", "success");
-        return ResponseEntity.ok(response);
+    public ResponseEntity<SuccessResponse<User>> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
+        User updatedUser = userService.updateUser(updateUserRequest);
+        return ResponseEntity.ok(new SuccessResponse<>("User updated successfully", updatedUser));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -113,14 +101,9 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content(schema = @Schema(implementation = Map.class)))
     })
-    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Integer id) {
-        Map<String, String> response = new HashMap<>();
-
+    public ResponseEntity<SuccessResponse<Void>> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
-
-        response.put("message", "User deleted successfully");
-        response.put("status", "success");
-        return ResponseEntity.status(204).body(response);
+        return ResponseEntity.status(204).body(new SuccessResponse<>("User deleted successfully"));
     }
 
     @PatchMapping("/update-email/{id}")
@@ -133,13 +116,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content(schema = @Schema(implementation = Map.class)))
     })
-    public ResponseEntity<Map<String, Object>> updateEmailForUser(@PathVariable @Positive(message = "Id must be positive") Integer id, @RequestParam @NotBlank(message = "Email is required") @Email(message = "Email must be valid") String email) {
-        Map<String, Object> response = new HashMap<>();
-
-        userService.updateEmailForUser(id, email);
-
-        response.put("message", "User email updated successfully");
-        response.put("status", "success");
-        return ResponseEntity.ok(response);
+    public ResponseEntity<SuccessResponse<User>> updateEmailForUser(@PathVariable @Positive(message = "Id must be positive") Integer id, @RequestParam @NotBlank(message = "Email is required") @Email(message = "Email must be valid") String email) {
+        User updatedUser = userService.updateEmailForUser(id, email);
+        return ResponseEntity.ok(new SuccessResponse<>("User email updated successfully", updatedUser));
     }
 }

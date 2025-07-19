@@ -1,5 +1,6 @@
 package com.example.rest.exception;
 
+import com.example.rest.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,23 +19,19 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
 
-        response.put("message", "Validation failed");
-        response.put("status", "error");
-        response.put("errors", errors);
-        return ResponseEntity.status(400).body(response);
+        ErrorResponse errorResponse = new ErrorResponse("Validation failed", "error", errors);
+        return ResponseEntity.status(400).body(errorResponse);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleConstraintViolationException(ConstraintViolationException ex) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
         Map<String, String> errors = new HashMap<>();
 
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
@@ -43,71 +40,56 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, violation.getMessage());
         }
 
-        response.put("message", "Validation failed");
-        response.put("status", "error");
-        response.put("errors", errors);
-        return ResponseEntity.status(400).body(response);
+        ErrorResponse errorResponse = new ErrorResponse("Validation failed", "error", errors);
+        return ResponseEntity.status(400).body(errorResponse);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Map<String, Object>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        Map<String, Object> response = new HashMap<>();
-
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         String message = ex.getMessage().toLowerCase();
+
         if (message.contains("duplicate") || message.contains("unique")) {
-            response.put("message", "A user with this email or username already exists");
-            response.put("status", "error");
-            return ResponseEntity.status(409).body(response);
+            ErrorResponse errorResponse = new ErrorResponse(
+                    "A user with this email or username already exists",
+                    "error"
+            );
+            return ResponseEntity.status(409).body(errorResponse);
         }
 
-        response.put("message", "Data integrity violation");
-        response.put("status", "error");
-        return ResponseEntity.status(400).body(response);
+        ErrorResponse errorResponse = new ErrorResponse("Data integrity violation", "error");
+        return ResponseEntity.status(400).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Map<String, Object>> handleTypeMismatchException(MethodArgumentTypeMismatchException ex) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ErrorResponse> handleTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        String message = String.format("Invalid value '%s' for parameter '%s'. Expected type: %s",
+                ex.getValue(), ex.getName(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName());
 
-        response.put("message", String.format("Invalid value '%s' for parameter '%s'. Expected type: %s",
-                ex.getValue(), ex.getName(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()));
-        response.put("status", "error");
-        return ResponseEntity.status(400).body(response);
+        ErrorResponse errorResponse = new ErrorResponse(message, "error");
+        return ResponseEntity.status(400).body(errorResponse);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("message", "Invalid argument: " + ex.getMessage());
-        response.put("status", "error");
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        ErrorResponse response = new ErrorResponse("Invalid argument: " + ex.getMessage(), "error");
         return ResponseEntity.status(400).body(response);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleUserNotFoundException(UserNotFoundException ex) {
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("message", ex.getMessage());
-        response.put("status", "error");
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        ErrorResponse response = new ErrorResponse(ex.getMessage(), "error");
         return ResponseEntity.status(404).body(response);
     }
 
     @ExceptionHandler(DuplicateUserException.class)
-    public ResponseEntity<Map<String, Object>> handleDuplicateUserException(DuplicateUserException ex) {
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("message", ex.getMessage());
-        response.put("status", "error");
+    public ResponseEntity<ErrorResponse> handleDuplicateUserException(DuplicateUserException ex) {
+        ErrorResponse response = new ErrorResponse(ex.getMessage(), "error");
         return ResponseEntity.status(409).body(response);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("message", "An unexpected error occurred: " + ex.getMessage());
-        response.put("status", "error");
-        return ResponseEntity.status(500).body(response);
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse("An unexpected error occurred: " + ex.getMessage(), "error");
+        return ResponseEntity.status(500).body(errorResponse);
     }
 }

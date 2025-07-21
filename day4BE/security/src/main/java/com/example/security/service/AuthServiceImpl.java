@@ -40,36 +40,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public SignInResponse signIn(SignInRequest signInRequest) {
-        try {
-            // Debug: Check if user exists
-            User user = userRepository.findByUsername(signInRequest.getUsername())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        signInRequest.getUsername(),
+                        signInRequest.getPassword()
+                )
+        );
 
-            System.out.println("Found user: " + user.getUsername());
-            System.out.println("Stored password hash: " + user.getPassword());
-            System.out.println("Input password: " + signInRequest.getPassword());
-            System.out.println("Password matches: " + passwordEncoder.matches(signInRequest.getPassword(), user.getPassword()));
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String token = generateToken(userDetails);
 
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            signInRequest.getUsername(),
-                            signInRequest.getPassword()
-                    )
-            );
+        Set<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
 
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String token = generateToken(userDetails);
-
-            Set<String> roles = userDetails.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toSet());
-
-            return new SignInResponse(token, roles);
-        } catch (Exception e) {
-            System.out.println("Authentication failed: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("Invalid username or password");
-        }
+        return new SignInResponse(token, roles);
     }
 
     @Override

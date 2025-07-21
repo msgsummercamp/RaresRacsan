@@ -2,116 +2,74 @@ package com.example.pdf;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.PdfWriter;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
+import com.itextpdf.text.pdf.*;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 @Service
-public class PdfGenService implements CommandLineRunner {
+public class PdfGenService {
     @Value("${pdf.output.dir}")
     private String outputDir;
 
-    private String fileName;
-    private String text;
-    private String imagePath;
-
-    public static void main(String[] args) {
-        SpringApplication.run(PdfGenService.class, args);
+    public String getOutputDir() {
+        return outputDir;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        generateDocument();
+    public Document createNewDocument() {
+        return new Document();
     }
 
-    public void generateDocument() {
-        // Write in terminal / command line the name of the generated PDF file
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the name of the PDF file to generate: ");
-        fileName = scanner.nextLine();
-        if (!fileName.endsWith(".pdf")) {
-            fileName += ".pdf";
-        }
-        // Use the output directory from application.properties
-        String fullPath = outputDir + java.io.File.separator + fileName;
-        System.out.println("PDF will be generated as: " + fullPath);
-        // Logic to create a PDF document
-        Document document = new Document();
-        try {
-            // Open the document with the specified file name
-            openDocument(fullPath, document);
-            while(true) {
-                System.out.println("Choose an option: 1 - Add text, 2 - Add Image, 3 - Close");
-                String option = scanner.nextLine();
-                if ("1".equals(option)) {
-                    addText(text, document);
-                } else if ("2".equals(option)) {
-                    addImage(imagePath, document);
-                } else if ("3".equals(option)) {
-                    break; // Exit the loop to close the document
-                } else {
-                    System.out.println("Invalid option. Please try again.");
-                }
-            }
-            // Close the document
-            closeDocument(document);
-            return;
-        } catch (Exception e) {
-            System.err.println("Error generating PDF: " + e.getMessage());
-        }
-    }
-
-    public void openDocument(String fileName, Document document) throws Exception {
-        // Initialize the PDF writer and open the document
-        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+    public void openDocument(String fullPath, Document document) throws Exception {
+        PdfWriter.getInstance(document, new FileOutputStream(fullPath));
         document.open();
-        System.out.println("Document opened successfully.");
     }
 
     public void closeDocument(Document document) {
-        // Close the document
         if (document.isOpen()) {
             document.close();
-            System.out.println("Document closed successfully.");
-        } else {
-            System.out.println("Document is already closed.");
         }
     }
 
-    public void addText(String text, Document document) {
-        // Logic to add text to the PDF document
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the text to add to the PDF: ");
-        text = scanner.nextLine();
-
-        try {
-            // Add text to the document
-            document.add(new com.itextpdf.text.Paragraph(text));
-            System.out.println("Text added to PDF: " + text);
-        } catch (Exception e) {
-            System.err.println("Error adding text to PDF: " + e.getMessage());
-        }
+    public void addText(String text, Document document) throws Exception {
+        document.add(new com.itextpdf.text.Paragraph(text));
     }
 
-    public void addImage(String imagePath, Document document) {
-        // Logic to add an image to the PDF document
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the path of the image to add to the PDF: ");
-        imagePath = scanner.nextLine();
+    public void addImage(String imagePath, Document document) throws Exception {
+        Path path = Paths.get(ClassLoader.getSystemResource(imagePath).toURI());
+        Image image = Image.getInstance(path.toAbsolutePath().toString());
+        document.add(image);
+    }
 
-        try {
-            Path path = Paths.get(ClassLoader.getSystemResource(imagePath).toURI());
-            Image image = Image.getInstance(path.toAbsolutePath().toString());
-            document.add(image);
-            System.out.println("Image added to PDF: " + imagePath);
-        } catch (Exception e) {
-            System.err.println("Error adding image to PDF: " + e.getMessage());
+    public void addTextToExistingPdf(String resourcePdfName, String textToAdd) throws Exception {
+        Path resourcePath = Paths.get("src/main/resources", resourcePdfName);
+        if (!resourcePath.toFile().exists()) {
+            throw new IllegalArgumentException("Resource PDF not found: " + resourcePdfName);
         }
+        Path tempPath = Paths.get("src/main/resources", "temp_" + resourcePdfName);
+        PdfReader reader = null;
+        PdfStamper stamper = null;
+        try {
+            reader = new PdfReader(resourcePath.toAbsolutePath().toString());
+            stamper = new PdfStamper(reader, new FileOutputStream(tempPath.toAbsolutePath().toString()));
+            int newPage = reader.getNumberOfPages() + 1;
+            stamper.insertPage(newPage, reader.getPageSize(1));
+            PdfContentByte content = stamper.getOverContent(newPage);
+            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+            content.beginText();
+            content.setFontAndSize(bf, 14);
+            content.setTextMatrix(50, 800); // Top of new page
+            content.showText(textToAdd);
+            content.endText();
+        } finally {
+            try { if (stamper != null) stamper.close(); } catch (Exception ignored) {}
+            try { if (reader != null) reader.close(); } catch (Exception ignored) {}
+        }
+        System.gc();
+        Thread.sleep(200);
+        java.nio.file.Files.delete(resourcePath);
+        java.nio.file.Files.move(tempPath, resourcePath);
     }
 }

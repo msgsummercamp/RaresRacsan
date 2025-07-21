@@ -1,0 +1,43 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Based on previous context, these likely need to be ignored if they are outside artifacts:
+day1BE/maven/
+day1BE/my-multi-module-project/
+day1BE/spring/
+
+# If 'day1BE' itself is your project, then you should only ignore build output like 'target'
+# within it, or specific IDE files. For example:
+# day1BE/target/
+# day1BE/.idea/

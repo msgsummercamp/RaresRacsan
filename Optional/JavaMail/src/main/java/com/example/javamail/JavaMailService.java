@@ -4,13 +4,12 @@ import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
-public class JavaMailService implements CommandLineRunner {
-    // These are the properties that will be injected from application.properties
+@Component
+public class JavaMailService {
     @Value("${mail.username}")
     private String username;
 
@@ -41,17 +40,7 @@ public class JavaMailService implements CommandLineRunner {
     @Value("${mail.text}")
     private String text;
 
-    public static void main(String[] args) {
-        SpringApplication.run(JavaMailService.class, args);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        sendEmail();
-    }
-
     public void sendEmail() {
-        // Set up the properties for the SMTP connection
         Properties prop = new Properties();
         prop.put("mail.smtp.host", host);
         prop.put("mail.smtp.port", port);
@@ -59,7 +48,6 @@ public class JavaMailService implements CommandLineRunner {
         prop.put("mail.smtp.socketFactory.port", socketFactoryPort);
         prop.put("mail.smtp.socketFactory.class", socketFactoryClass);
 
-        // Create a session with the properties and an authenticator
         Session session = Session.getInstance(prop,
                 new jakarta.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -68,7 +56,6 @@ public class JavaMailService implements CommandLineRunner {
                 });
 
         try {
-            // Create a default MimeMessage object
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(

@@ -1,5 +1,3 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
 # Compiled output
 /dist
 /tmp
@@ -10,8 +8,6 @@
 /node_modules
 npm-debug.log
 yarn-error.log
-# package-lock.json # If using yarn, uncomment this line. If using npm, leave it commented so it's tracked.
-yarn.lock           # If using npm, uncomment this line to ignore yarn.lock if you don't use yarn.
 
 # IDEs and editors
 .idea/
@@ -23,17 +19,12 @@ yarn.lock           # If using npm, uncomment this line to ignore yarn.lock if y
 *.sublime-workspace
 
 # Visual Studio Code
-# The following .vscode files are typically shared among developers and should be tracked.
-# We explicitly UN-ignore them here.
-.vscode/
+.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-# If you have other .vscode files you wish to track, add them with a '!' prefix.
-# Otherwise, any other files in .vscode/ will be ignored.
-
-.history/             # Visual Studio Code Local History Extension folder
+.history/*
 
 # Miscellaneous
 /.angular/cache
@@ -48,49 +39,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
-*.log
-logs/
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Output of 'npm pack'
-*.tgz
-
-# Temporary folders
-tmp/
-temp/
-
-# Editor backup files
-*~
-*.swp
-*.swo
-
-# OS generated files
-*.DS_Store*
-ehthumbs.db
-Icon?
-Thumbs.db
-*.lnk
-
-# Additional Angular/TypeScript files
-*.tsbuildinfo
-.angular/
-.nyc_output/
+/public
+/src/assets

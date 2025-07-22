@@ -1,11 +1,14 @@
 const fetchUrl = "https://dog.ceo/api/breeds/image/random";
-const imgElement = document.getElementById("dog-image");    
+const imgElement = document.getElementById("dog-image");
+const loaderElement = document.getElementsByClassName("loader");
 
 async function showDog() {
     try {
-        const response = await fetch(fetchUrl); // Fetch a random dog image
-        const data = await response.json();     // Parse the JSON response
-        imgElement.src = data.message;          // Set the image source to the dog image URL
+        const response = await fetch(fetchUrl);
+        const data = await response.json();
+        imgElement.src = data.message;
+        imgElement.hidden = false;
+        loaderElement[0].hidden = true;
     } catch(error) {
         console.error("Error fetching dog image:", error);
     }

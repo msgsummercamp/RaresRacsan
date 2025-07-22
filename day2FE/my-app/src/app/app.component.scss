@@ -1,6 +1,6 @@
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
+//@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
-.app-container {
+.app-header {
   margin-top: 64px; /* to test the fixed toolbar */
 }
 
@@ -23,4 +23,5 @@ a {
   left: 0;
   right: 0;
   z-index: 1000;
+  background-color: var(--mat-sys-primary-container);
 }

@@ -26,6 +26,12 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# Test files
+*.spec.ts
+*.spec.js
+**/*.spec.ts
+**/*.spec.js
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/

@@ -10,7 +10,8 @@
 /node_modules
 npm-debug.log
 yarn-error.log
-package-lock.json  # If using yarn, or yarn.lock if using npm
+# package-lock.json # If using yarn, uncomment this line. If using npm, leave it commented so it's tracked.
+yarn.lock           # If using npm, uncomment this line to ignore yarn.lock if you don't use yarn.
 
 # IDEs and editors
 .idea/
@@ -22,12 +23,17 @@ package-lock.json  # If using yarn, or yarn.lock if using npm
 *.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
+# The following .vscode files are typically shared among developers and should be tracked.
+# We explicitly UN-ignore them here.
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
+# If you have other .vscode files you wish to track, add them with a '!' prefix.
+# Otherwise, any other files in .vscode/ will be ignored.
+
+.history/             # Visual Studio Code Local History Extension folder
 
 # Miscellaneous
 /.angular/cache
@@ -83,3 +89,8 @@ ehthumbs.db
 Icon?
 Thumbs.db
 *.lnk
+
+# Additional Angular/TypeScript files
+*.tsbuildinfo
+.angular/
+.nyc_output/

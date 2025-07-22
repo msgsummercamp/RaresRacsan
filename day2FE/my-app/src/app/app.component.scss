@@ -1,0 +1,27 @@
+//@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+.app-header {
+  margin-top: 64px; /* to test the fixed toolbar */
+}
+
+main {
+  margin-top: 64px;
+  padding: 20px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+a {
+  margin-left: 10px;
+}
+
+.app-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--mat-sys-primary-container);
+}

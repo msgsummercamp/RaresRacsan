@@ -30,6 +30,10 @@ export class AppComponent {
     // fetch the data and update the image source
     this.http.get<DogResponse>(fetchUrl).subscribe({
       next: (response) => {
+        if (response.status !== 'success') {
+          console.error('Failed to fetch dog image');
+          return;
+        }
         this.data.set(response.message);
         dogImage.src = this.data();
         dogImage.hidden = false;

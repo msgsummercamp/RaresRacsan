@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--mat-sys-primary-container);
+}
+
+.title {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 20px;
+  color: var(--mat-sys-primary);
+}
+
+p {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+button {
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+a {
+  color: var(--mat-sys-tertiary);
+}

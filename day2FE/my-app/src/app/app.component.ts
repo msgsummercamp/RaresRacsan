@@ -1,7 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButton } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
+import { AuthDirective } from './auth.directive';
 
 // response type for the showRandomDog method
 type DogResponse = {
@@ -12,13 +13,24 @@ type DogResponse = {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MatToolbar, MatButton],
+  imports: [MatToolbar, MatButton, AuthDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  // hardcoded logged-in state
+  public loggedIn: WritableSignal<boolean> = signal(false);
   private readonly http = inject(HttpClient);
   public readonly data = signal('');
+
+  // hardcoded logged-in state
+  logIn() {
+    this.loggedIn.set(true);
+  }
+
+  logOut() {
+    this.loggedIn.set(false);
+  }
 
   async showRandomDog() {
     // the url and the image element

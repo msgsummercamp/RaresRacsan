@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringBootApplication
 public class PdfGenApplication implements CommandLineRunner {
 
-    @Autowired
-    private PdfGenUI pdfGenUI;
+    private final PdfGenUI pdfGenUI;
+
+    public PdfGenApplication(PdfGenUI pdfGenUI) {
+        this.pdfGenUI = pdfGenUI;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(PdfGenApplication.class, args);

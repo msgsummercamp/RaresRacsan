@@ -8,33 +8,17 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class PdfGenService {
     @Value("${pdf.output.dir}")
     private String outputDir;
+    private static final Logger logger = LoggerFactory.getLogger(PdfGenService.class);
 
     public String getOutputDir() {
         return outputDir;
-    }
-
-    public Document createNewDocument() {
-        return new Document();
-    }
-
-    public void openDocument(String fullPath, Document document) throws Exception {
-        PdfWriter.getInstance(document, new FileOutputStream(fullPath));
-        document.open();
-    }
-
-    public void closeDocument(Document document) {
-        if (document.isOpen()) {
-            document.close();
-        }
-    }
-
-    public void addText(String text, Document document) throws Exception {
-        document.add(new com.itextpdf.text.Paragraph(text));
     }
 
     public void addImage(String imagePath, Document document) throws Exception {
@@ -48,15 +32,19 @@ public class PdfGenService {
         if (!resourcePath.toFile().exists()) {
             throw new IllegalArgumentException("Resource PDF not found: " + resourcePdfName);
         }
+
         Path tempPath = Paths.get("src/main/resources", "temp_" + resourcePdfName);
         PdfReader reader = null;
         PdfStamper stamper = null;
+
         try {
             reader = new PdfReader(resourcePath.toAbsolutePath().toString());
             stamper = new PdfStamper(reader, new FileOutputStream(tempPath.toAbsolutePath().toString()));
+
             int newPage = reader.getNumberOfPages() + 1;
             stamper.insertPage(newPage, reader.getPageSize(1));
             PdfContentByte content = stamper.getOverContent(newPage);
+
             BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
             content.beginText();
             content.setFontAndSize(bf, 14);
@@ -64,9 +52,14 @@ public class PdfGenService {
             content.showText(textToAdd);
             content.endText();
         } finally {
-            try { if (stamper != null) stamper.close(); } catch (Exception ignored) {}
-            try { if (reader != null) reader.close(); } catch (Exception ignored) {}
+            try { if (stamper != null) stamper.close(); } catch (Exception e) {
+                logger.error("Error closing PdfStamper: {}", e.getMessage(), e);
+            }
+            try { if (reader != null) reader.close(); } catch (Exception e) {
+                logger.error("Error closing PdfReader: {}", e.getMessage(), e);
+            }
         }
+
         System.gc();
         Thread.sleep(200);
         java.nio.file.Files.delete(resourcePath);

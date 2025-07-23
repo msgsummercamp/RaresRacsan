@@ -1,16 +1,22 @@
 package com.example.pdf;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class PdfGenUI {
 
     private final PdfGenService pdfGenService;
     private final Scanner scanner;
+    private static final Logger logger = LoggerFactory.getLogger(PdfGenUI.class);
 
     @Autowired
     public PdfGenUI(PdfGenService pdfGenService) {
@@ -34,44 +40,54 @@ public class PdfGenUI {
     private void createNewPdfFlow() {
         System.out.print("Enter the name of the PDF file to generate: ");
         String fileName = scanner.nextLine();
+
         if (!fileName.endsWith(".pdf")) {
             fileName += ".pdf";
         }
+
         String fullPath = pdfGenService.getOutputDir() + File.separator + fileName;
         System.out.println("PDF will be generated as: " + fullPath);
 
-        Document document = pdfGenService.createNewDocument();
+        Document document = new Document();
+
         try {
-            pdfGenService.openDocument(fullPath, document);
+            PdfWriter.getInstance(document, new FileOutputStream(fullPath));
+            document.open();
             System.out.println("Document opened successfully.");
 
             while (true) {
                 System.out.println("Choose an option: 1 - Add text, 2 - Add Image, 3 - Close");
                 String option = scanner.nextLine();
-                if ("1".equals(option)) {
-                    System.out.print("Enter the text to add to the PDF: ");
-                    String text = scanner.nextLine();
-                    pdfGenService.addText(text, document);
-                    System.out.println("Text added to PDF: " + text);
-                } else if ("2".equals(option)) {
-                    System.out.print("Enter the path of the image to add to the PDF (e.g., myImage.png in resources): ");
-                    String imagePath = scanner.nextLine();
-                    try {
-                        pdfGenService.addImage(imagePath, document);
-                        System.out.println("Image added to PDF: " + imagePath);
-                    } catch (Exception e) {
-                        System.err.println("Error adding image: " + e.getMessage());
-                    }
-                } else if ("3".equals(option)) {
-                    break;
-                } else {
-                    System.out.println("Invalid option. Please try again.");
+                switch (option) {
+                    case "1":
+                        System.out.print("Enter the text to add to the PDF: ");
+                        String text = scanner.nextLine();
+                        document.add(new Paragraph(text));
+                        System.out.println("Text added to PDF: " + text);
+                        break;
+                    case "2":
+                        System.out.print("Enter the path of the image to add to the PDF (e.g., myImage.png in resources): ");
+                        String imagePath = scanner.nextLine();
+                        try {
+                            pdfGenService.addImage(imagePath, document);
+                            System.out.println("Image added to PDF: " + imagePath);
+                        } catch (Exception e) {
+                            logger.error("Error adding image: " + e.getMessage());
+                        }
+                        break;
+                    case "3":
+                        return;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                        break;
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error generating PDF: " + e.getMessage());
+            logger.error("Error generating PDF: {}", e.getMessage(), e);
         } finally {
-            pdfGenService.closeDocument(document);
+            if (document.isOpen()) {
+                document.close();
+            }
             System.out.println("Document closed successfully.");
         }
     }
@@ -87,9 +103,9 @@ public class PdfGenUI {
             pdfGenService.addTextToExistingPdf(resourcePdf, textToAdd);
             System.out.println("Text added to end of existing PDF. Overwritten: " + resourcePdf);
         } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+            logger.error(e.getMessage());
         } catch (Exception e) {
-            System.err.println("Error modifying existing PDF: " + e.getMessage());
+            logger.error("Error modifying existing PDF: " + e.getMessage());
         }
     }
 }

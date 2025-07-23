@@ -3,6 +3,7 @@ package com.example.pdf;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import java.io.FileOutputStream;
@@ -11,15 +12,12 @@ import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Getter
 @Service
 public class PdfGenService {
     @Value("${pdf.output.dir}")
     private String outputDir;
     private static final Logger logger = LoggerFactory.getLogger(PdfGenService.class);
-
-    public String getOutputDir() {
-        return outputDir;
-    }
 
     public void addImage(String imagePath, Document document) throws Exception {
         Path path = Paths.get(ClassLoader.getSystemResource(imagePath).toURI());
@@ -52,10 +50,18 @@ public class PdfGenService {
             content.showText(textToAdd);
             content.endText();
         } finally {
-            try { if (stamper != null) stamper.close(); } catch (Exception e) {
+            try {
+                if (stamper != null) {
+                    stamper.close();
+                }
+            } catch (Exception e) {
                 logger.error("Error closing PdfStamper: {}", e.getMessage(), e);
             }
-            try { if (reader != null) reader.close(); } catch (Exception e) {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (Exception e) {
                 logger.error("Error closing PdfReader: {}", e.getMessage(), e);
             }
         }

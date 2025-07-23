@@ -1,12 +1,6 @@
-//@import "@angular/material/prebuilt-themes/indigo-pink.css";
-
-.app-header {
-  margin-top: 64px; /* to test the fixed toolbar */
-}
-
 main {
-  margin-top: 64px;
-  padding: 20px;
+  margin-top: 4rem;
+  padding: 1.5rem;
 }
 
 .spacer {
@@ -14,7 +8,7 @@ main {
 }
 
 a {
-  margin-left: 10px;
+  margin-left: 1rem;
 }
 
 .app-toolbar {

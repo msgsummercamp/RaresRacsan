@@ -17,7 +17,7 @@ type DogResponse = {
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   public readonly data = signal('');
 
   async showRandomDog() {

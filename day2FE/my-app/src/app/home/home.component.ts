@@ -12,14 +12,13 @@ type DogResponse = {
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [CommonModule, MatButton, AuthDirective],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent {
   // hardcoded logged-in state
-  public readonly loggedIn: WritableSignal<boolean> = signal(false);
+  public readonly loggedIn = signal(false);
   private readonly http = inject(HttpClient);
   public readonly data = signal('');
 
@@ -32,12 +31,15 @@ export class HomeComponent {
     this.loggedIn.set(false);
   }
 
-  async showRandomDog() {
+  public async showRandomDog(): Promise<void> {
     // the url and the image element
     const fetchUrl: string = 'https://dog.ceo/api/breeds/image/random';
     const dogImage: HTMLImageElement = document.getElementById(
       'dogImage'
     ) as HTMLImageElement;
+    const errorMessage: HTMLElement = document.getElementById(
+      'error-message'
+    ) as HTMLElement;
 
     // fetch the data and update the image source
     this.http.get<DogResponse>(fetchUrl).subscribe({
@@ -50,7 +52,11 @@ export class HomeComponent {
         dogImage.src = this.data();
         dogImage.hidden = false;
       },
-      error: (err) => console.log('Error: ' + err),
+      // changed from console.log to an error message on screen
+      error: (err) => (
+        (errorMessage.textContent = `Error fetching dog image: ${err.message}`),
+        (errorMessage.hidden = false)
+      ),
     });
   }
 }

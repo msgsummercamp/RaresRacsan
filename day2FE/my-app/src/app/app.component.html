@@ -22,9 +22,12 @@
   </mat-toolbar>
 </header>
 <main>
-  <h1>Welcome to My Test App</h1>
-  <p>This is a simple Angular application to demonstrate the layout.</p>
-  <button (click)="showRandomDog()">Show a random dog!</button>
+  <button mat-button (click)="logIn()">Log In</button>
+  <button mat-button (click)="logOut()">Log Out</button>
   <br />
-  <img id="dogImage" width="300" height="300" hidden alt="A random dog" />
+  <button mat-button (click)="showRandomDog()">Show a random dog!</button>
+  <br />
+  <img id="dogImage" width="300" height="300" hidden />
+  <br />
+  <p [appAuth]="loggedIn()">Secret message for dog lovers muhahahhahah</p>
 </main>

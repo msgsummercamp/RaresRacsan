@@ -1,17 +1,19 @@
 <header class="app-header">
   <mat-toolbar class="app-toolbar">
     <span>My Test App</span>
-    <button mat-button><a href="/">Home</a></button>
     <button mat-button>
-      <a href="">Github link</a>
+      <a routerLink="/home" routerLinkActive="newSpecialHomeClass">Home</a>
+    </button>
+    <button mat-button>
+      <a routerLink="/again not good">Github link</a>
     </button>
 
     <span class="spacer"></span>
 
-    <a href="">
+    <a routerLink="/login">
       <img src="assets/user-interface.png" alt="Login" width="35" height="35" />
     </a>
-    <a href="">
+    <a routerLink="/something not good">
       <img
         src="assets/question-sign.png"
         alt="Question Sign"
@@ -22,12 +24,5 @@
   </mat-toolbar>
 </header>
 <main>
-  <button mat-button (click)="logIn()">Log In</button>
-  <button mat-button (click)="logOut()">Log Out</button>
-  <br />
-  <button mat-button (click)="showRandomDog()">Show a random dog!</button>
-  <br />
-  <img id="dogImage" width="300" height="300" hidden />
-  <br />
-  <p [appAuth]="loggedIn()">Secret message for dog lovers muhahahhahah</p>
+  <router-outlet></router-outlet>
 </main>

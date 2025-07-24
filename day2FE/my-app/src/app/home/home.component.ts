@@ -4,6 +4,7 @@ import { MatButton } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
 import { AuthDirective } from '../auth.directive';
 import { AuthService } from '../services/auth.service';
+import { SecretPipe } from '../pipes/secret.pipe';
 
 // response type for the showRandomDog method
 type DogResponse = {
@@ -13,7 +14,7 @@ type DogResponse = {
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, MatButton, AuthDirective],
+  imports: [CommonModule, MatButton, AuthDirective, SecretPipe],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

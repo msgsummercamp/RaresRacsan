@@ -10,6 +10,8 @@
     <br />
     <img id="dogImage" width="300" height="300" hidden />
     <br />
-    <p [appAuth]="loggedIn()">Secret message for dog lovers muhahahhahah</p>
+    <p [appAuth]="loggedIn()">
+      {{ "SECRET MESSAGE for dog LOVERS" | pipe }}
+    </p>
   </div>
 </div>

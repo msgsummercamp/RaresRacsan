@@ -42,10 +42,7 @@ public class UserController {
                                                            @RequestParam (defaultValue = "asc") String sortDirection) {
         Map<String, Object> response = new HashMap<>();
 
-        if (page < 0 || size <= 0) {
-            throw new IllegalArgumentException("Page number must be non-negative and size must be positive");
-        }
-
+        // moved validation logic to UserService
 
         Page<User> userPage = userService.getAllUsers(page, size, sortBy, sortDirection);
 

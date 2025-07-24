@@ -1,0 +1,15 @@
+<div class="home-container">
+  <h1>Welcome to the Home Page</h1>
+  <p>This is the main content area for your application.</p>
+
+  <div class="actions">
+    <button mat-button (click)="logIn()">Log In</button>
+    <button mat-button (click)="logOut()">Log Out</button>
+    <br />
+    <button mat-button (click)="showRandomDog()">Show a random dog!</button>
+    <br />
+    <img id="dogImage" width="300" height="300" hidden />
+    <br />
+    <p [appAuth]="loggedIn()">Secret message for dog lovers muhahahhahah</p>
+  </div>
+</div>

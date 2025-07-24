@@ -19,16 +19,16 @@ type DogResponse = {
 })
 export class AppComponent {
   // hardcoded logged-in state
-  public loggedIn: WritableSignal<boolean> = signal(false);
+  public readonly loggedIn: WritableSignal<boolean> = signal(false);
   private readonly http = inject(HttpClient);
   public readonly data = signal('');
 
   // hardcoded logged-in state
-  logIn() {
+  public logIn(): void {
     this.loggedIn.set(true);
   }
 
-  logOut() {
+  public logOut(): void {
     this.loggedIn.set(false);
   }
 

@@ -1,5 +1,6 @@
 import {
   Directive,
+  effect,
   ElementRef,
   inject,
   input,
@@ -12,12 +13,21 @@ import { toObservable } from '@angular/core/rxjs-interop';
 })
 export class AuthDirective {
   private readonly element = inject(ElementRef);
-  public readonly isLoggedIn: InputSignal<boolean> = input.required<boolean>();
+  public readonly appAuth: InputSignal<boolean> = input.required<boolean>();
 
   constructor() {
-    toObservable(this.isLoggedIn).subscribe((loggedIn) => {
+    toObservable(this.appAuth).subscribe((loggedIn) => {
       this.element.nativeElement.style.display = loggedIn ? 'block' : 'none';
       this.element.nativeElement.classList.add('secretMessage');
     });
+
+    /* used effect here
+    effect(() => {
+      this.element.nativeElement.style.display = this.appAuth()
+        ? 'block'
+        : 'none';
+      this.element.nativeElement.classList.add('secretMessage');
+    });
+    */
   }
 }

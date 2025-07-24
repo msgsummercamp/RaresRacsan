@@ -24,16 +24,7 @@ export class HomeComponent {
   private readonly authService = inject(AuthService);
 
   public readonly data = signal('');
-  public readonly loggedIn = this.authService.loggedIn;
-
-  // hardcoded logged-in state
-  public logIn(): void {
-    this.authService.logIn();
-  }
-
-  public logOut(): void {
-    this.authService.logOut();
-  }
+  public readonly loggedIn = this.authService.loggedIn; // kept for showing logged in message on /home (used as directive param on home.component.html)
 
   public async showRandomDog(): Promise<void> {
     // the url and the image element

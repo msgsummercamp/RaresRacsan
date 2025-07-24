@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
 import { AuthDirective } from '../auth.directive';
+import { AuthService } from '../services/auth.service';
 
 // response type for the showRandomDog method
 type DogResponse = {
@@ -12,24 +13,25 @@ type DogResponse = {
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [CommonModule, MatButton, AuthDirective],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
   // hardcoded logged-in state
-  public readonly loggedIn: WritableSignal<boolean> = signal(false);
   private readonly http = inject(HttpClient);
+  private readonly authService = inject(AuthService);
+
   public readonly data = signal('');
+  public readonly loggedIn = this.authService.loggedIn;
 
   // hardcoded logged-in state
   public logIn(): void {
-    this.loggedIn.set(true);
+    this.authService.logIn();
   }
 
   public logOut(): void {
-    this.loggedIn.set(false);
+    this.authService.logOut();
   }
 
   async showRandomDog() {

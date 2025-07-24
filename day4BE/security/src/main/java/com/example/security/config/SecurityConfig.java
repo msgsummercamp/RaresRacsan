@@ -1,5 +1,6 @@
 package com.example.security.config;
 
+import com.example.security.model.RoleEnum;
 import com.example.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/users/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/users/**").hasAnyRole("ADMIN", "USER")
+                        // role enum created
+                        .requestMatchers("/users/**").hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.USER.name())
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers

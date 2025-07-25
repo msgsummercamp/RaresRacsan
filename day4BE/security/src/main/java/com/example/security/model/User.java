@@ -32,7 +32,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = true)
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")
     @Schema(description = "Email address of the user", example = "john@example.com", required = true)

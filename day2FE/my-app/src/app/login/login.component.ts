@@ -14,9 +14,10 @@ import {
   FormControl,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 
 type LoginForm = {
-  email: FormControl<string>;
+  username: FormControl<string>;
   password: FormControl<string>;
 };
 
@@ -39,29 +40,22 @@ type LoginForm = {
 export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly _formBuilder = inject(NonNullableFormBuilder);
+  private readonly router = inject(Router);
+
+  private username: string = '';
+  private password: string = '';
 
   protected readonly loginFormGroup = this._formBuilder.group<LoginForm>({
-    email: this._formBuilder.control('', [
-      Validators.required,
-      Validators.email,
-    ]),
+    username: this._formBuilder.control('', [Validators.required]),
     password: this._formBuilder.control('', [
       Validators.required,
       Validators.minLength(4),
     ]),
   });
 
-  protected onFormSubmit(): void {
-    if (this.loginFormGroup.valid) {
-      this.logIn();
-    }
-  }
-
-  protected logIn(): void {
-    this.authService.logIn();
-  }
-
-  protected logOut(): void {
-    this.authService.logOut();
+  public onLogin(): void {
+    this.username = this.loginFormGroup.controls.username.value;
+    this.password = this.loginFormGroup.controls.password.value;
+    this.authService.login(this.username, this.password);
   }
 }

@@ -14,15 +14,15 @@
 
     <span class="spacer"></span>
 
-    <button routerLink="/login">
-      <img src="assets/login.png" alt="Login" width="35" height="35" />
-    </button>
-    <button routerLink="/randomDog">
-      <img src="assets/dog.png" alt="Random Dog" width="35" height="35" />
-    </button>
-    <button routerLink="/home" (click)="logout()">
-      <img src="assets/logout.png" alt="Logout" width="35" height="35" />
-    </button>
+    <mat-button routerLink="/login">
+      <mat-icon fontIcon="account_circle" alt="Login" width="35" height="35" />
+    </mat-button>
+    <mat-button routerLink="/randomDog">
+      <mat-icon fontIcon="pets" alt="Random Dog" width="35" height="35" />
+    </mat-button>
+    <mat-button routerLink="/home" (click)="logout()">
+      <mat-icon fontIcon="logout" alt="Logout" width="35" height="35" />
+    </mat-button>
   </mat-toolbar>
 </header>
 <main>

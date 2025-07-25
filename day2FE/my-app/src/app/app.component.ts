@@ -5,11 +5,19 @@ import { RouterOutlet } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MatToolbar, MatButton, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [
+    MatToolbar,
+    MatButton,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    MatIcon,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

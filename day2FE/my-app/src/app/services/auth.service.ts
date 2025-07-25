@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private readonly _loggedIn = signal<boolean>(false);
   public readonly loggedIn = this._loggedIn.asReadonly();
-  constructor(private router: Router) {}
+  private readonly router = inject(Router);
 
   public logIn(): void {
     this._loggedIn.set(true);

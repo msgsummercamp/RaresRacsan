@@ -22,6 +22,10 @@ public class UserService {
     }
 
     public Page<User> getAllUsers(int page, int size, String sortBy, String sortDir) {
+        if (page < 0 || size <= 0) {
+            throw new IllegalArgumentException("Page number must be non-negative and size must be positive");
+        }
+
         Sort sort = sortDir.equalsIgnoreCase("desc") ?
                 Sort.by(sortBy).descending() :
                 Sort.by(sortBy).ascending();

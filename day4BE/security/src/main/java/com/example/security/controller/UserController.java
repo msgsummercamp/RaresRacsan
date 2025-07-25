@@ -2,6 +2,7 @@ package com.example.security.controller;
 
 import com.example.security.dto.SuccessResponse;
 import com.example.security.dto.UpdateUserRequest;
+import com.example.security.dto.UserPageResponse;
 import com.example.security.dto.UserRequest;
 import com.example.security.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.example.security.model.User;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -36,30 +36,24 @@ public class UserController {
     @GetMapping
     @Operation(summary = "Get all users", description = "Retrieve a list of all users")
     @ApiResponse(responseCode = "200", description = "Users retrieved successfully")
-    public ResponseEntity<Map<String, Object>> getAllUsers(@RequestParam (defaultValue = "0") int page,
+    public ResponseEntity<UserPageResponse> getAllUsers(@RequestParam (defaultValue = "0") int page,
                                                            @RequestParam (defaultValue = "5") int size,
                                                            @RequestParam (defaultValue = "id") String sortBy,
                                                            @RequestParam (defaultValue = "asc") String sortDirection) {
-        Map<String, Object> response = new HashMap<>();
-
-        if (page < 0 || size <= 0) {
-            throw new IllegalArgumentException("Page number must be non-negative and size must be positive");
-        }
-
+        // moved validation logic to UserService
 
         Page<User> userPage = userService.getAllUsers(page, size, sortBy, sortDirection);
 
-        response.put("message", "Users retrieved successfully");
-        response.put("status", "success");
-        response.put("users", userPage.getContent());
-        response.put("pagination", Map.of(
-                "currentPage", userPage.getNumber(),
-                "totalPages", userPage.getTotalPages(),
-                "totalElements", userPage.getTotalElements(),
-                "hasNext", userPage.hasNext(),
-                "hasPrevious", userPage.hasPrevious(),
-                "size", userPage.getSize()
-        ));
+        // created dto for page response
+        UserPageResponse response = new UserPageResponse(
+                userPage.getContent(),
+                userPage.getNumber(),
+                userPage.getTotalPages(),
+                userPage.getTotalElements(),
+                userPage.hasNext(),
+                userPage.hasPrevious(),
+                userPage.getSize()
+        );
         return ResponseEntity.ok(response);
     }
 

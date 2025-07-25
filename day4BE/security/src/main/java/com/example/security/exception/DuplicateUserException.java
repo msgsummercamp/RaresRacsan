@@ -5,7 +5,5 @@ public class DuplicateUserException extends RuntimeException {
         super(message);
     }
 
-    public DuplicateUserException(String field, String value) {
-        super("User with " + field + " '" + value + "' already exists");
-    }
+    // removed unused constructor
 }

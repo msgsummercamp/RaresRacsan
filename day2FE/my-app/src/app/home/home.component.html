@@ -1,8 +1,11 @@
 <div class="home-container">
   <h1>Welcome to the Home Page</h1>
-  <p>This is the main content area for your application.</p>
+  <p>
+    This is the main content area of the application. If you are logged in
+    please check /randomDog by pressing the paw icon =)
+  </p>
 
   <p [appAuth]="loggedIn()">
-    {{ "SECRET MESSAGE for dog LOVERS" | pipe }}
+    {{ "You are Logged In" | pipe }}
   </p>
 </div>

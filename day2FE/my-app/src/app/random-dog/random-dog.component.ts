@@ -18,7 +18,7 @@ import { MatCard } from '@angular/material/card';
 })
 export class RandomDogComponent {
   private readonly randomDogService = inject(RandomdogService);
-  public readonly data = signal('');
+  private readonly data = signal('');
 
   @ViewChild('dogImage', { static: false })
   dogImageRef!: ElementRef<HTMLImageElement>;

@@ -1,26 +1,28 @@
 <header class="app-header">
   <mat-toolbar class="app-toolbar">
-    <span>My Test App</span>
-    <button mat-button>
-      <a routerLink="/home" routerLinkActive="newSpecialHomeClass">Home</a>
+    <span class="page-title">Random dog generator</span>
+    <button mat-button routerLinkActive="newSpecialClass" routerLink="/home">
+      Home
     </button>
-    <button mat-button>
-      <a routerLink="/again not good">Github link</a>
+    <button
+      mat-button
+      routerLinkActive="newSpecialClass"
+      routerLink="/again not good"
+    >
+      GitHub Link
     </button>
 
     <span class="spacer"></span>
 
-    <a routerLink="/login">
-      <img src="assets/user-interface.png" alt="Login" width="35" height="35" />
-    </a>
-    <a routerLink="/randomDog">
-      <img
-        src="assets/question-sign.png"
-        alt="Random Dog"
-        width="35"
-        height="35"
-      />
-    </a>
+    <button routerLink="/login">
+      <img src="assets/login.png" alt="Login" width="35" height="35" />
+    </button>
+    <button routerLink="/randomDog">
+      <img src="assets/dog.png" alt="Random Dog" width="35" height="35" />
+    </button>
+    <button routerLink="/home" (click)="logout()">
+      <img src="assets/logout.png" alt="Logout" width="35" height="35" />
+    </button>
   </mat-toolbar>
 </header>
 <main>

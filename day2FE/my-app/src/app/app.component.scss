@@ -7,8 +7,15 @@ main {
   flex: 1 1 auto;
 }
 
+.page-title {
+  margin-right: 1rem;
+}
+
 a {
-  margin-left: 1rem;
+  font-size: large;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .app-toolbar {
@@ -18,8 +25,28 @@ a {
   right: 0;
   z-index: 1000;
   background-color: var(--mat-sys-primary-container);
+  gap: 1rem;
 }
 
-.newSpecialHomeClass {
-  color: pink;
+.newSpecialClass {
+  color: white !important;
+  background-color: var(--mat-sys-primary);
+
+  img {
+    filter: brightness(0) invert(1);
+  }
+}
+
+button {
+  border: none;
+  background: none;
+  border-radius: 5%;
+
+  img {
+    transition: filter 0.3s ease;
+  }
+}
+
+button:hover {
+  cursor: pointer;
 }

@@ -1,12 +1,28 @@
-main {
+mat-card {
+  width: 60%;
+  margin: 2rem auto;
+
+  mat-card-header {
+    justify-content: center;
+  }
+
+  mat-card-title {
+    text-align: center;
+  }
+}
+
+form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
+  padding: 1rem;
 
-  .buttons-container {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1rem;
+  mat-form-field {
+    width: 40%;
+  }
+
+  button {
+    width: 40%;
   }
 }

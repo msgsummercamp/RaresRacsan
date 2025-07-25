@@ -8,16 +8,17 @@ import {
 } from '@angular/core';
 import { RandomdogService } from '../services/randomdog.service';
 import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
 
 @Component({
   selector: 'app-random-dog',
-  imports: [MatButton],
+  imports: [MatButton, MatCard],
   templateUrl: './random-dog.component.html',
   styleUrl: './random-dog.component.scss',
 })
 export class RandomDogComponent {
   private readonly randomDogService = inject(RandomdogService);
-  public readonly data = signal('');
+  private readonly data = signal('');
 
   @ViewChild('dogImage', { static: false })
   dogImageRef!: ElementRef<HTMLImageElement>;

@@ -4,7 +4,8 @@
 }
 
 .secretMessage {
-  color: pink;
+  color: var(--mat-sys-primary-container);
+  font-weight: bold;
 }
 
 #error-message {

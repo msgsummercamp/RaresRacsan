@@ -8,9 +8,10 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
-// removed @Crossorigin
 public class AuthController {
 
     private final AuthService authService;
@@ -20,12 +21,14 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<SignInResponse> signIn(@Valid @RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<?> signIn(@Valid @RequestBody SignInRequest signInRequest) {
         try {
             SignInResponse response = authService.signIn(signInRequest);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            throw new RuntimeException("Invalid username or password");
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(401)
+                    .body(Map.of("message", "Invalid username or password"));
         }
     }
 
@@ -37,5 +40,10 @@ public class AuthController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok().build();
     }
 }

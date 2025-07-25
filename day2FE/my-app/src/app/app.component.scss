@@ -31,4 +31,22 @@ a {
 .newSpecialClass {
   color: white !important;
   background-color: var(--mat-sys-primary);
+
+  img {
+    filter: brightness(0) invert(1);
+  }
+}
+
+button {
+  border: none;
+  background: none;
+  border-radius: 5%;
+
+  img {
+    transition: filter 0.3s ease;
+  }
+}
+
+button:hover {
+  cursor: pointer;
 }

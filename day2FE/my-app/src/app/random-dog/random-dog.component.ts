@@ -8,10 +8,11 @@ import {
 } from '@angular/core';
 import { RandomdogService } from '../services/randomdog.service';
 import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
 
 @Component({
   selector: 'app-random-dog',
-  imports: [MatButton],
+  imports: [MatButton, MatCard],
   templateUrl: './random-dog.component.html',
   styleUrl: './random-dog.component.scss',
 })

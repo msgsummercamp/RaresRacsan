@@ -24,7 +24,8 @@
       <mat-error>Password is required.</mat-error>
       }
     </mat-form-field>
-
+    @if (loginFormGroup.valid) {
     <button mat-flat-button type="submit">Log In</button>
+    }
   </form>
 </mat-card>

@@ -11,7 +11,7 @@ import { SecretPipe } from '../pipes/secret.pipe';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  private readonly authService = inject(AuthService);
+  private readonly _authService = inject(AuthService);
 
-  public readonly loggedIn = this.authService.loggedIn; // kept for showing logged in message on /home (used as directive param on home.component.html)
+  public readonly loggedIn = this._authService.loggedIn; // kept for showing logged in message on /home (used as directive param on home.component.html)
 }

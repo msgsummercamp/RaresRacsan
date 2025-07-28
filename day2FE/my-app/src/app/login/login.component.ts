@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 
 type LoginForm = {
-  email: FormControl<string>;
+  username: FormControl<string>;
   password: FormControl<string>;
 };
 
@@ -37,13 +37,13 @@ type LoginForm = {
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  private readonly authService = inject(AuthService);
+  private readonly _authService = inject(AuthService);
   private readonly _formBuilder = inject(NonNullableFormBuilder);
 
   protected readonly loginFormGroup = this._formBuilder.group<LoginForm>({
-    email: this._formBuilder.control('', [
+    username: this._formBuilder.control('', [
       Validators.required,
-      Validators.email,
+      Validators.minLength(3),
     ]),
     password: this._formBuilder.control('', [
       Validators.required,
@@ -51,17 +51,8 @@ export class LoginComponent {
     ]),
   });
 
-  protected onFormSubmit(): void {
-    if (this.loginFormGroup.valid) {
-      this.logIn();
-    }
-  }
-
-  protected logIn(): void {
-    this.authService.logIn();
-  }
-
-  protected logOut(): void {
-    this.authService.logOut();
+  public onLogin(): void {
+    const { username, password } = this.loginFormGroup.getRawValue();
+    this._authService.login(username, password);
   }
 }

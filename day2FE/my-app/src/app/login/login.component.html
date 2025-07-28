@@ -2,12 +2,14 @@
   <mat-card-header>
     <mat-card-title>Login</mat-card-title>
   </mat-card-header>
-  <form novalidate [formGroup]="loginFormGroup" (ngSubmit)="onFormSubmit()">
+  <form novalidate [formGroup]="loginFormGroup" (ngSubmit)="onLogin()">
     <mat-form-field subscriptSizing="dynamic">
-      <mat-label>E-mail</mat-label>
-      <input matInput type="email" id="email" formControlName="email" />
-      @if ( loginFormGroup.controls.email.invalid ) {
-      <mat-error>E-mail is required.</mat-error>
+      <mat-label>Username</mat-label>
+      <input matInput type="text" id="username" formControlName="username" />
+      @if (loginFormGroup.controls.username.hasError('minlength')) {
+      <mat-error>Username must be at least 3 characters long.</mat-error>
+      } @if (loginFormGroup.controls.username.hasError('required')) {
+      <mat-error>Username is required.</mat-error>
       }
     </mat-form-field>
     <mat-form-field subscriptSizing="dynamic">

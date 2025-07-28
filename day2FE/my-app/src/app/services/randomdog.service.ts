@@ -1,6 +1,6 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { first, firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 type DogResponse = {
   message: string;
@@ -11,14 +11,15 @@ type DogResponse = {
   providedIn: 'root',
 })
 export class RandomdogService {
-  private readonly http = inject(HttpClient);
+  private readonly _http = inject(HttpClient);
 
-  private readonly fetchUrl: string = 'https://dog.ceo/api/breeds/image/random';
+  private readonly _fetchUrl: string =
+    'https://dog.ceo/api/breeds/image/random';
 
   public async showRandomDog(): Promise<string> {
     try {
       const response = await firstValueFrom(
-        this.http.get<DogResponse>(this.fetchUrl)
+        this._http.get<DogResponse>(this._fetchUrl)
       );
       if (response.status !== 'success') {
         return 'Error fetching random dog';

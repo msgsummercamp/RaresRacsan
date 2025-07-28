@@ -17,8 +17,8 @@ import { MatCard } from '@angular/material/card';
   styleUrl: './random-dog.component.scss',
 })
 export class RandomDogComponent {
-  private readonly randomDogService = inject(RandomdogService);
-  private readonly data = signal('');
+  private readonly _randomDogService = inject(RandomdogService);
+  private readonly _data = signal('');
 
   @ViewChild('dogImage', { static: false })
   dogImageRef!: ElementRef<HTMLImageElement>;
@@ -28,7 +28,7 @@ export class RandomDogComponent {
 
   constructor() {
     effect(() => {
-      const imageUrl = this.data();
+      const imageUrl = this._data();
       if (imageUrl) {
         if (imageUrl.startsWith('Error')) {
           if (this.errorMessageRef) {
@@ -53,10 +53,10 @@ export class RandomDogComponent {
 
   public async showRandomDog(): Promise<void> {
     try {
-      const imageUrl = await this.randomDogService.showRandomDog();
-      this.data.set(imageUrl);
+      const imageUrl = await this._randomDogService.showRandomDog();
+      this._data.set(imageUrl);
     } catch (error) {
-      this.data.set('Error:' + error);
+      this._data.set('Error:' + error);
     }
   }
 }

@@ -14,8 +14,6 @@ import {
   FormControl,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-
 type LoginForm = {
   username: FormControl<string>;
   password: FormControl<string>;
@@ -38,15 +36,14 @@ type LoginForm = {
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  private readonly authService = inject(AuthService);
+  private readonly _authService = inject(AuthService);
   private readonly _formBuilder = inject(NonNullableFormBuilder);
-  private readonly router = inject(Router);
-
-  private username: string = '';
-  private password: string = '';
 
   protected readonly loginFormGroup = this._formBuilder.group<LoginForm>({
-    username: this._formBuilder.control('', [Validators.required]),
+    username: this._formBuilder.control('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
     password: this._formBuilder.control('', [
       Validators.required,
       Validators.minLength(4),
@@ -54,8 +51,9 @@ export class LoginComponent {
   });
 
   public onLogin(): void {
-    this.username = this.loginFormGroup.controls.username.value;
-    this.password = this.loginFormGroup.controls.password.value;
-    this.authService.login(this.username, this.password);
+    this._authService.login(
+      this.loginFormGroup.controls.username.value,
+      this.loginFormGroup.controls.password.value
+    );
   }
 }

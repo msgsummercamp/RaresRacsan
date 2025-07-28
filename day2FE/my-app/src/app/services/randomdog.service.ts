@@ -1,6 +1,6 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { first, firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 type DogResponse = {
   message: string;

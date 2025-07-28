@@ -1,6 +1,5 @@
 import {
   Directive,
-  effect,
   ElementRef,
   inject,
   input,

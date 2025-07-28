@@ -18,6 +18,17 @@ export class AuthService {
 
   public readonly loggedIn = this._loggedIn.asReadonly();
 
+  constructor() {
+    this.checkAuthState();
+  }
+
+  private checkAuthState(): void {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      this._loggedIn.set(true);
+    }
+  }
+
   public login(username: string, password: string): void {
     this._http
       .post<ResponseType>(this._apiUrl, { username, password })
@@ -32,15 +43,15 @@ export class AuthService {
   }
 
   public logout(): void {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     this._loggedIn.set(false);
   }
 
   public getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 
   private setToken(token: string): void {
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
   }
 }

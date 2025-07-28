@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 type ResponseType = {
   token: string;
@@ -13,8 +14,9 @@ export class AuthService {
   private readonly _loggedIn = signal<boolean>(false);
   private readonly _router = inject(Router);
   private readonly _http = inject(HttpClient);
+  private readonly _apiUrl = environment.apiUrl;
+
   public readonly loggedIn = this._loggedIn.asReadonly();
-  private readonly _apiUrl = 'http://localhost:8080/api/auth/signin';
 
   public login(username: string, password: string): void {
     this._http

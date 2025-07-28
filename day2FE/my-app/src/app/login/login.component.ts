@@ -52,9 +52,7 @@ export class LoginComponent {
   });
 
   public onLogin(): void {
-    this._authService.login(
-      this.loginFormGroup.controls.username.value,
-      this.loginFormGroup.controls.password.value
-    );
+    const { username, password } = this.loginFormGroup.getRawValue();
+    this._authService.login(username, password);
   }
 }

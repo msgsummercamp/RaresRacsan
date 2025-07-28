@@ -2,7 +2,7 @@ import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-type responseType = {
+type ResponseType = {
   token: string;
 };
 
@@ -11,21 +11,19 @@ type responseType = {
 })
 export class AuthService {
   private readonly _loggedIn = signal<boolean>(false);
+  private readonly _router = inject(Router);
+  private readonly _http = inject(HttpClient);
   public readonly loggedIn = this._loggedIn.asReadonly();
-  private readonly router = inject(Router);
-  private readonly http = inject(HttpClient);
-
-  private readonly apiUrl = 'http://localhost:8080/api/auth/signin';
+  private readonly _apiUrl = 'http://localhost:8080/api/auth/signin';
 
   public login(username: string, password: string): void {
-    this.http
-      .post<responseType>(this.apiUrl, { username, password })
+    this._http
+      .post<ResponseType>(this._apiUrl, { username, password })
       .subscribe({
         next: (response) => {
-          console.log('Response: ', response);
           this._loggedIn.set(true);
           this.setToken(response.token);
-          this.router.navigate(['/home']);
+          this._router.navigate(['/home']);
         },
         error: (err) => console.error(err),
       });

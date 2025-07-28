@@ -11,21 +11,21 @@ import { toObservable } from '@angular/core/rxjs-interop';
   selector: '[appAuth]',
 })
 export class AuthDirective {
-  private readonly element = inject(ElementRef);
+  private readonly _element = inject(ElementRef);
   public readonly appAuth: InputSignal<boolean> = input.required<boolean>();
 
   constructor() {
     toObservable(this.appAuth).subscribe((loggedIn) => {
-      this.element.nativeElement.style.display = loggedIn ? 'block' : 'none';
-      this.element.nativeElement.classList.add('secretMessage');
+      this._element.nativeElement.style.display = loggedIn ? 'block' : 'none';
+      this._element.nativeElement.classList.add('secretMessage');
     });
 
     /* used effect here
     effect(() => {
-      this.element.nativeElement.style.display = this.appAuth()
+      this._element.nativeElement.style.display = this.appAuth()
         ? 'block'
         : 'none';
-      this.element.nativeElement.classList.add('secretMessage');
+      this._element.nativeElement.classList.add('secretMessage');
     });
     */
   }

@@ -22,8 +22,9 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  private readonly authService = inject(AuthService);
+  private readonly _authService = inject(AuthService);
+
   public logout(): void {
-    this.authService.logout();
+    this._authService.logout();
   }
 }
